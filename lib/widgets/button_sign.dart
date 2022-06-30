@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class SignButton extends StatelessWidget {
-
   final Function press;
   final String label;
 
@@ -16,8 +15,13 @@ class SignButton extends StatelessWidget {
       shape: StadiumBorder(),
       onPressed: press,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical:15),
-        child: Center(child: Text(label,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 18),)),
+        margin: EdgeInsets.symmetric(vertical: 15),
+        child: Center(
+            child: Text(
+          label,
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+        )),
       ),
     );
   }

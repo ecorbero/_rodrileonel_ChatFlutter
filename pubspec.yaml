@@ -32,7 +32,7 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   provider: ^6.0.3
   http: ^0.13.4
-  flutter_secure_storage: ^3.3.5
+  flutter_secure_storage: ^5.0.2
   socket_io_client: ^1.0.2
 
 dev_dependencies:
