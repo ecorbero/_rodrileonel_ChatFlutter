@@ -19,4 +19,4 @@ To start this project:
 
 ## Bibliography
 
-https://github.com/rodrileonel/flutter-chat-server
+https://github.com/rodrileonel/ChatSocket
