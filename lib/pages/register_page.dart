@@ -1,50 +1,46 @@
-import 'package:chat/helpers/show_alert.dart';
-import 'package:chat/pages/login_page.dart';
-import 'package:chat/pages/users_page.dart';
-import 'package:chat/services/auth_service.dart';
-import 'package:chat/services/socket.dart';
-import 'package:chat/widgets/button_sign.dart';
-import 'package:chat/widgets/input.dart';
-import 'package:chat/widgets/login_register_button.dart';
-import 'package:chat/widgets/logo.dart';
+import 'package:flutter_chat/helpers/show_alert.dart';
+import 'package:flutter_chat/pages/login_page.dart';
+import 'package:flutter_chat/pages/users_page.dart';
+import 'package:flutter_chat/services/auth_service.dart';
+import 'package:flutter_chat/services/socket.dart';
+import 'package:flutter_chat/widgets/button_sign.dart';
+import 'package:flutter_chat/widgets/input.dart';
+import 'package:flutter_chat/widgets/login_register_button.dart';
+import 'package:flutter_chat/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
-
-  static final routeName = 'Register';
+  static const routeName = 'Register';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height*0.9,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children:[
-                Logo(),
-                _Form(),
-                LoginRegisterButton(
-                  routeName: LoginPage.routeName, 
-                  label: '¿Ya tienes una cuenta?',
-                  textButton: 'Ingresa ahora!',
-                ),
-                SizedBox(height:50),
-                Text('Términos y condiciones'),
-              ]
+        backgroundColor: Colors.grey[300],
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.9,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Logo(),
+                    _Form(),
+                    const LoginRegisterButton(
+                      routeName: LoginPage.routeName,
+                      label: 'Already have an Account?',
+                      textButton: 'Log In then!',
+                    ),
+                    //const SizedBox(height: 50),
+                    const Text('Terms and conditions'),
+                  ]),
             ),
           ),
-        ),
-      )
-   );
+        ));
   }
 }
 
 class _Form extends StatelessWidget {
-
   final userController = TextEditingController();
   final emailController = TextEditingController();
   final passController = TextEditingController();
@@ -55,31 +51,52 @@ class _Form extends StatelessWidget {
     final socketService = Provider.of<SocketService>(context);
     return Center(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal:40),
-        child: Column(
-          children:[
-            Input(icon: Icons.perm_identity_outlined, placeholder: 'Usuario',controller: userController,),
-            SizedBox(height: 20,),
-            Input(icon: Icons.email_outlined, placeholder: 'Email',controller: emailController,),
-            SizedBox(height: 20,),
-            Input(icon: Icons.lock_outlined, placeholder: 'Contraseña', controller: passController, hidden: true,),
-            SizedBox(height: 30,),
-            SignButton(
-              label: 'Registrarse',
-              press: authService.logeando ?null:() async {
-                final msg = await authService.register(userController.text.trim(), emailController.text.trim(), passController.text);
-                if(msg==true){
-                  socketService.connect();
-                  Navigator.pushReplacementNamed(context, UsersPage.routeName);
-                }
-                else
-                  showAlert(context, 'Registro', msg);
-              },
-            ),
-          ]
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Column(children: [
+          Input(
+            icon: Icons.perm_identity_outlined,
+            placeholder: 'User',
+            controller: userController,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Input(
+            icon: Icons.email_outlined,
+            placeholder: 'Email',
+            controller: emailController,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Input(
+            icon: Icons.lock_outlined,
+            placeholder: 'Password',
+            controller: passController,
+            hidden: true,
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          SignButton(
+            label: 'Register',
+            press: authService.logeando
+                ? null
+                : () async {
+                    final msg = await authService.register(
+                        userController.text.trim(),
+                        emailController.text.trim(),
+                        passController.text);
+                    if (msg == true) {
+                      socketService.connect();
+                      Navigator.pushReplacementNamed(
+                          context, UsersPage.routeName);
+                    } else
+                      showAlert(context, 'Register', msg);
+                  },
+          ),
+        ]),
       ),
     );
   }
 }
-

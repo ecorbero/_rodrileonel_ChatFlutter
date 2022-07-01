@@ -1,18 +1,16 @@
-import 'package:chat/pages/chat_page.dart';
-import 'package:chat/pages/login_page.dart';
-import 'package:chat/services/auth_service.dart';
-import 'package:chat/services/chat_service.dart';
-import 'package:chat/services/socket.dart';
-import 'package:chat/services/users_service.dart';
+import 'package:flutter_chat/pages/chat_page.dart';
+import 'package:flutter_chat/pages/login_page.dart';
+import 'package:flutter_chat/services/auth_service.dart';
+import 'package:flutter_chat/services/chat_service.dart';
+import 'package:flutter_chat/services/socket.dart';
+import 'package:flutter_chat/services/users_service.dart';
 import 'package:flutter/material.dart';
-import 'package:chat/models/user_model.dart';
+import 'package:flutter_chat/models/user_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-
 class UsersPage extends StatefulWidget {
-
   static final routeName = 'Users';
 
   @override
@@ -20,12 +18,12 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
-
   final usersService = UsersService();
-  
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
-  List<User> users =[];
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  List<User> users = [];
 
   @override
   void initState() {
@@ -39,12 +37,15 @@ class _UsersPageState extends State<UsersPage> {
     final socketService = Provider.of<SocketService>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(user.name,style: TextStyle(color: Colors.black),),
+        title: Text(
+          user.name,
+          style: TextStyle(color: Colors.black),
+        ),
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 116, 178, 229),
         leading: IconButton(
-          icon: Icon(Icons.exit_to_app_outlined,color: Colors.black),
-          onPressed: (){
+          icon: Icon(Icons.exit_to_app_outlined, color: Colors.black),
+          onPressed: () {
             socketService.disconnect();
             AuthService.deleteToken();
             Navigator.pushReplacementNamed(context, LoginPage.routeName);
@@ -53,8 +54,11 @@ class _UsersPageState extends State<UsersPage> {
         actions: [
           Container(
             alignment: Alignment.center,
-            margin:EdgeInsets.only(right:20),
-            child: FaIcon(FontAwesomeIcons.plug, color: (socketService.serverStatus==ServerStatus.Online)?Colors.green:Colors.grey),
+            margin: EdgeInsets.only(right: 20),
+            child: FaIcon(FontAwesomeIcons.plug,
+                color: (socketService.serverStatus == ServerStatus.Online)
+                    ? Colors.green
+                    : Colors.grey),
           ),
         ],
       ),
@@ -62,14 +66,18 @@ class _UsersPageState extends State<UsersPage> {
         controller: _refreshController,
         header: WaterDropHeader(
           waterDropColor: Colors.blue,
-          complete: Icon(FontAwesomeIcons.check,color: Colors.green,),
+          complete: Icon(
+            FontAwesomeIcons.check,
+            color: Colors.green,
+          ),
         ),
         onRefresh: _loadingUsers,
         child: ListView.separated(
-          physics:BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(),
           itemCount: users.length,
           separatorBuilder: (BuildContext context, int index) => Divider(),
-          itemBuilder: (BuildContext context, int index) => UserItem(users[index]), 
+          itemBuilder: (BuildContext context, int index) =>
+              UserItem(users[index]),
         ),
       ),
     );
@@ -88,18 +96,20 @@ class UserItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return ListTile(
       title: Text(user.name),
       subtitle: Text(user.email),
       leading: CircleAvatar(
-        child: Text(user.name.substring(0,2)),
+        child: Text(user.name.substring(0, 2)),
       ),
-      trailing: Icon(Icons.online_prediction, color: (user.online)?Colors.green:Colors.red,),
-      onTap: (){ 
-        final chatService = Provider.of<ChatService>(context,listen: false);
+      trailing: Icon(
+        Icons.online_prediction,
+        color: (user.online) ? Colors.green : Colors.red,
+      ),
+      onTap: () {
+        final chatService = Provider.of<ChatService>(context, listen: false);
         chatService.userFrom = user;
-        Navigator.pushNamed(context, ChatPage.routeName); 
+        Navigator.pushNamed(context, ChatPage.routeName);
       },
     );
   }

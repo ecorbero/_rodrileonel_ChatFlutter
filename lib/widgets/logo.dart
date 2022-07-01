@@ -6,12 +6,13 @@ class Logo extends StatelessWidget {
     return Center(
       child: Container(
         width: 400,
-        child: Column(
-          children:[
-            Image(image: AssetImage('assets/icon.png')),
-            Text('Super Mesenger',style:TextStyle(fontSize: 30))
-          ]
-        ),
+        child: Column(children: const [
+          Image(
+            image: AssetImage('assets/icon.png'),
+            height: 80,
+          ),
+          //Text('Super Mesenger',style:TextStyle(fontSize: 30))
+        ]),
       ),
     );
   }
