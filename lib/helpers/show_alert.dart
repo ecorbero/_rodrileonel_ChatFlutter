@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 showAlert(BuildContext context, String title, String subtitle) {
-  if (Platform.isAndroid) {
+  if (kIsWeb || Platform.isAndroid) {
     return showDialog(
         context: context,
         builder: (_) => AlertDialog(

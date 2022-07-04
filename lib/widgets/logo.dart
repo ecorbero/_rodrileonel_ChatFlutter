@@ -8,8 +8,8 @@ class Logo extends StatelessWidget {
         width: 400,
         child: Column(children: const [
           Image(
-            image: AssetImage('assets/icon.png'),
-            height: 80,
+            image: AssetImage('assets/logo.png'),
+            height: 240,
           ),
           //Text('Super Mesenger',style:TextStyle(fontSize: 30))
         ]),

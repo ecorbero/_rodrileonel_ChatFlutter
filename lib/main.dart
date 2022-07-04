@@ -24,6 +24,10 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        theme: ThemeData(
+          primaryColor: const Color(0xFF075E54),
+          fontFamily: 'OpenSans',
+        ),
         debugShowCheckedModeBanner: false,
         title: 'Material App',
         initialRoute: LoadingPage.routeName,

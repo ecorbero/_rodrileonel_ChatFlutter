@@ -16,27 +16,37 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[300],
+        //backgroundColor: Colors.grey[300],
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.9,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Logo(),
-                    _Form(),
-                    const LoginRegisterButton(
-                      routeName: LoginPage.routeName,
-                      label: 'Already have an Account?',
-                      textButton: 'Log In then!',
-                    ),
-                    //const SizedBox(height: 50),
-                    const Text('Terms and conditions'),
-                  ]),
-            ),
-          ),
-        ));
+      child: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Logo(),
+                const SizedBox(
+                  height: 10,
+                ),
+                _Form(),
+                const SizedBox(
+                  height: 10,
+                ),
+                const LoginRegisterButton(
+                  routeName: LoginPage.routeName,
+                  label: 'Already have an Account?',
+                  textButton: 'Log In then!',
+                ),
+                //const SizedBox(height: 50),
+                const Text('Terms and conditions'),
+              ]),
+        ),
+      ),
+    ));
   }
 }
 

@@ -87,33 +87,49 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 1,
+        backgroundColor: const Color.fromARGB(255, 0, 157, 200),
         title: Row(children: [
           CircleAvatar(
-              child: (user != null)
-                  ? Text('${user.name.substring(0, 2)}')
-                  : Text('')),
-          SizedBox(width: 10),
+            backgroundColor: const Color.fromARGB(255, 145, 231, 255),
+            child: Text(
+              user.name.substring(0, 2),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.blue[900],
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
           Expanded(
-              child: (user != null)
-                  ? Text(
-                      '${user.name}',
-                      style: TextStyle(color: Colors.black),
-                    )
-                  : Text('')),
+            child: Text(
+              user.name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                //color: Colors.blue[900],
+              ),
+            ),
+          ),
         ]),
-        elevation: 1,
-        backgroundColor: Color.fromARGB(255, 116, 178, 229),
       ),
       body: Container(
         child: Column(
           children: [
             Flexible(
-              child: ListView.builder(
-                reverse: true,
-                itemCount: _items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return _items[index];
-                },
+              child: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/whatsapp_back.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: ListView.builder(
+                  reverse: true,
+                  itemCount: _items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return _items[index];
+                  },
+                ),
               ),
             ),
             const Divider(height: 2),

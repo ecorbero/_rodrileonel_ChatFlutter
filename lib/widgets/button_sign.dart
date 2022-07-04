@@ -12,7 +12,10 @@ class SignButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(elevation: 5),
+      style: ElevatedButton.styleFrom(
+        elevation: 5,
+        primary: Colors.greenAccent[700],
+      ),
       onPressed: press,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 15),

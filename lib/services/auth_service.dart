@@ -29,7 +29,7 @@ class AuthService with ChangeNotifier {
         body: jsonEncode(request),
         headers: {'Content-Type': 'application/json'});
 
-    print(response.body);
+    //print(response.body);
 
     logeando = false;
 
@@ -68,8 +68,8 @@ class AuthService with ChangeNotifier {
     var writeToken = await _storage.write(key: 'token', value: token);
     var readToken = await _storage.read(key: 'token');
 
-    print("jiwfjñwf");
-    print(readToken);
+    //print("jiwfjñwf");
+    //print(readToken);
 
     return writeToken;
   }
@@ -111,8 +111,8 @@ class AuthService with ChangeNotifier {
 
     token ??= "na";
 
-    print("dfffeef");
-    print(token);
+    //print("dfffeef");
+    //print(token);
 
     //final response = await http.get(
     //    Uri.parse('${Environment.apiUrl}/login/renew'),
@@ -126,7 +126,7 @@ class AuthService with ChangeNotifier {
 
     //print("sssq");
 
-    print(response.body);
+    //print(response.body);
 
     if (response.statusCode == 200) {
       final data = loginResponseFromJson(response.body);
