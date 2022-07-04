@@ -39,12 +39,12 @@ class _UsersPageState extends State<UsersPage> {
       appBar: AppBar(
         title: Text(
           user.name,
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
         elevation: 1,
-        backgroundColor: Color.fromARGB(255, 116, 178, 229),
+        backgroundColor: const Color.fromARGB(255, 116, 178, 229),
         leading: IconButton(
-          icon: Icon(Icons.exit_to_app_outlined, color: Colors.black),
+          icon: const Icon(Icons.exit_to_app_outlined, color: Colors.black),
           onPressed: () {
             socketService.disconnect();
             AuthService.deleteToken();
@@ -54,7 +54,7 @@ class _UsersPageState extends State<UsersPage> {
         actions: [
           Container(
             alignment: Alignment.center,
-            margin: EdgeInsets.only(right: 20),
+            margin: const EdgeInsets.only(right: 20),
             child: FaIcon(FontAwesomeIcons.plug,
                 color: (socketService.serverStatus == ServerStatus.Online)
                     ? Colors.green
@@ -64,7 +64,7 @@ class _UsersPageState extends State<UsersPage> {
       ),
       body: SmartRefresher(
         controller: _refreshController,
-        header: WaterDropHeader(
+        header: const WaterDropHeader(
           waterDropColor: Colors.blue,
           complete: Icon(
             FontAwesomeIcons.check,
@@ -73,9 +73,10 @@ class _UsersPageState extends State<UsersPage> {
         ),
         onRefresh: _loadingUsers,
         child: ListView.separated(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           itemCount: users.length,
-          separatorBuilder: (BuildContext context, int index) => Divider(),
+          separatorBuilder: (BuildContext context, int index) =>
+              const Divider(),
           itemBuilder: (BuildContext context, int index) =>
               UserItem(users[index]),
         ),

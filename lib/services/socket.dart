@@ -2,6 +2,7 @@ import 'package:flutter_chat/global/environment.dart';
 import 'package:flutter_chat/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 enum ServerStatus { Online, Offline, Conecting }
 
@@ -9,39 +10,71 @@ class SocketService with ChangeNotifier {
   ServerStatus _serverStatus = ServerStatus.Conecting;
   late IO.Socket _socket;
 
-  ServerStatus get serverStatus => this._serverStatus;
-  IO.Socket get socket => this._socket;
+  ServerStatus get serverStatus => _serverStatus;
+  IO.Socket get socket => _socket;
 
   void connect() async {
     //obtengo el token del storage
     final token = await AuthService.getToken();
 
-    print('Conectando al socket...');
+    print('Conectant al socket... token = ${token}');
 
-    this._socket = IO.io(Environment.socketUrl, {
-      'transports': ['websocket'],
-      'autoConnect': true,
-      'forceNew': true, //crea una nueva instancia/cliente,
-      //sin esto el backend trata de mantener la misma sesion
-      //pero necesitamos que sea una nueva por el manejo de tokens
-      'extraHeaders': {
-        'x-token': token,
-      }
-    });
-    this._socket.on('connect', (_) {
+    if (kIsWeb) {
+      // for Web => run without ".setTransports"..
+      _socket = IO.io(Environment.socketUrl, {
+        //'transports': ['websocket'],
+        'autoConnect': true,
+        'forceNew': true, //crea una nueva instancia/cliente,
+        //sin esto el backend trata de mantener la misma sesion
+        //pero necesitamos que sea una nueva por el manejo de tokens
+        'extraHeaders': {
+          'x-token': token,
+        }
+      });
+    } else {
+      // for No Web => run with ".setTransports"...
+      _socket = IO.io(Environment.socketUrl, {
+        'transports': ['websocket'],
+        'autoConnect': true,
+        'forceNew': true, //crea una nueva instancia/cliente,
+        //sin esto el backend trata de mantener la misma sesion
+        //pero necesitamos que sea una nueva por el manejo de tokens
+        'extraHeaders': {
+          'x-token': token,
+        }
+      });
+    }
+
+    // Connect to websocket
+    //socket.connect();
+    socket.onConnect((data) => {
+          print('Connected to socket server'),
+          _serverStatus = ServerStatus.Online,
+          notifyListeners(),
+        });
+
+    socket.onDisconnect((data) => {
+          print('Disconnected from socket server'),
+          _serverStatus = ServerStatus.Offline,
+          notifyListeners(),
+        });
+/*
+    _socket.on('connect', (_) {
       print('Connected to socket server');
-      this._serverStatus = ServerStatus.Online;
+      _serverStatus = ServerStatus.Online;
       notifyListeners();
     });
-    this._socket.on('disconnect', (_) {
+    _socket.on('disconnect', (_) {
       print('Disconnected from socket server');
-      this._serverStatus = ServerStatus.Offline;
+      _serverStatus = ServerStatus.Offline;
       notifyListeners();
     });
+
+*/
   }
 
   void disconnect() {
     print('Desconectando del socket...');
-    this._socket.disconnect();
+    _socket.disconnect();
   }
 }

@@ -9,6 +9,7 @@ import 'package:flutter_chat/widgets/chat_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ChatPage extends StatefulWidget {
   static const routeName = 'Chat';
@@ -29,6 +30,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   late AuthService authService;
   late ChatService chatService;
 
+  late bool isIos;
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +41,14 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
     user = chatService.userFrom;
     socketService.socket.on('message', _listenMessage);
+
+    isIos = false;
+
+    if (!kIsWeb) {
+      if (Platform.isIOS) {
+        isIos = true;
+      }
+    }
 
     _loadingChat(chatService.userFrom.uid);
   }
@@ -140,7 +151,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
               ),
             ),
             Container(
-                child: Platform.isIOS
+                child: isIos
                     ? CupertinoButton(
                         onPressed: writing
                             ? () => _handleSubmit(_textControler.text)

@@ -6,6 +6,7 @@ import 'package:flutter_chat/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+//import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AuthService with ChangeNotifier {
   late User user;
@@ -13,14 +14,14 @@ class AuthService with ChangeNotifier {
 
   final _storage = const FlutterSecureStorage();
 
-  bool get logeando => this._logeando;
+  bool get logeando => _logeando;
   set logeando(value) {
-    this._logeando = value;
+    _logeando = value;
     notifyListeners();
   }
 
   Future login(String email, String password) async {
-    this.logeando = true;
+    logeando = true;
 
     final request = {'email': email, 'password': password};
 
@@ -30,12 +31,12 @@ class AuthService with ChangeNotifier {
 
     print(response.body);
 
-    this.logeando = false;
+    logeando = false;
 
     if (response.statusCode == 200) {
       final data = loginResponseFromJson(response.body);
-      this.user = data.user;
-      await this._saveToken(data.token);
+      user = data.user;
+      await _saveToken(data.token);
       return true;
     } else {
       return false;
@@ -43,7 +44,7 @@ class AuthService with ChangeNotifier {
   }
 
   Future register(String name, String email, String password) async {
-    this.logeando = true;
+    logeando = true;
 
     final request = {'name': name, 'email': email, 'password': password};
 
@@ -51,23 +52,30 @@ class AuthService with ChangeNotifier {
         Uri.parse('${Environment.apiUrl}/login/new'),
         body: jsonEncode(request),
         headers: {'Content-Type': 'application/json'});
-    this.logeando = false;
+    logeando = false;
 
     if (response.statusCode == 200) {
       final data = loginResponseFromJson(response.body);
-      this.user = data.user;
-      await this._saveToken(data.token);
+      user = data.user;
+      await _saveToken(data.token);
       return true;
-    } else
+    } else {
       return jsonDecode(response.body)['msg'];
+    }
   }
 
   Future _saveToken(String token) async {
-    return await _storage.write(key: 'token', value: token);
+    var writeToken = await _storage.write(key: 'token', value: token);
+    var readToken = await _storage.read(key: 'token');
+
+    print("jiwfjñwf");
+    print(readToken);
+
+    return writeToken;
   }
 
   Future<bool> logged() async {
-    //final token = await this._storage.read(key: 'token');
+    //final token = await _storage.read(key: 'token');
 
     //print("e22e");
 
@@ -92,29 +100,41 @@ class AuthService with ChangeNotifier {
         //body: jsonEncode(model.toJson()),
         );
 */
-    var token = await this._storage.read(key: 'token');
+/*
+    // If built for Web Skip Check
+    if (kIsWeb) {
+      logout();
+      return false;
+    }
+*/
+    var token = await _storage.read(key: 'token');
 
-    token ??= "";
+    token ??= "na";
 
+    print("dfffeef");
     print(token);
 
     //final response = await http.get(
     //    Uri.parse('${Environment.apiUrl}/login/renew'),
     //    headers: {'Content-Type': 'application/json', 'x-token': token!});
 
+    //print(Environment.apiUrl);
+
     final response = await http.get(
         Uri.parse('${Environment.apiUrl}/login/renew'),
         headers: {'Content-Type': 'application/json', 'x-token': token});
+
+    //print("sssq");
 
     print(response.body);
 
     if (response.statusCode == 200) {
       final data = loginResponseFromJson(response.body);
-      this.user = data.user;
-      await this._saveToken(data.token);
+      user = data.user;
+      await _saveToken(data.token);
       return true;
     } else {
-      this.logout();
+      logout();
       return false;
     }
   }
