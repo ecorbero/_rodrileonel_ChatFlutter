@@ -26,15 +26,15 @@ class LoginPage extends StatelessWidget {
               //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 const SizedBox(
-                  height: 20,
+                  height: 5,
                 ),
                 Logo(),
                 const SizedBox(
-                  height: 20,
+                  height: 5,
                 ),
                 _Form(),
                 const SizedBox(
-                  height: 20,
+                  height: 5,
                 ),
                 const LoginRegisterButton(
                   routeName: RegisterPage.routeName,
@@ -68,7 +68,7 @@ class _Form extends StatelessWidget {
             controller: emailController,
           ),
           const SizedBox(
-            height: 20,
+            height: 16,
           ),
           Input(
             icon: Icons.lock_outlined,
@@ -77,7 +77,7 @@ class _Form extends StatelessWidget {
             hidden: true,
           ),
           const SizedBox(
-            height: 30,
+            height: 16,
           ),
           SignButton(
             label: 'Log In',

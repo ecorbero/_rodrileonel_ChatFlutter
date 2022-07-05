@@ -5,11 +5,11 @@ class Logo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 400,
+        width: 320,
         child: Column(children: const [
           Image(
             image: AssetImage('assets/logo.png'),
-            height: 240,
+            height: 160,
           ),
           //Text('Super Mesenger',style:TextStyle(fontSize: 30))
         ]),
