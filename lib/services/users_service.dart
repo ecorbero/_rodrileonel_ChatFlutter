@@ -12,7 +12,9 @@ class UsersService {
         'Content-Type': 'application/json',
         'x-token': await AuthService.getToken() ?? 'Default Value',
       });
+
       final data = usersResponseFromJson(response.body);
+
       return data.users;
     } catch (e) {
       return [];

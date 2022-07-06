@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   static const routeName = 'Login';
 
   @override
@@ -60,7 +62,8 @@ class _Form extends StatelessWidget {
     final socketService = Provider.of<SocketService>(context);
     return Center(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 40),
+        constraints: const BoxConstraints(minWidth: 180, maxWidth: 600),
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(children: [
           Input(
             icon: Icons.email_outlined,

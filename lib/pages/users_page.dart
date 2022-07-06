@@ -1,7 +1,10 @@
+import 'package:flutter_chat/models/room_model.dart';
 import 'package:flutter_chat/pages/chat_page.dart';
 import 'package:flutter_chat/pages/login_page.dart';
+import 'package:flutter_chat/pages/newroom_page.dart';
 import 'package:flutter_chat/services/auth_service.dart';
 import 'package:flutter_chat/services/chat_service.dart';
+import 'package:flutter_chat/services/room_service.dart';
 import 'package:flutter_chat/services/socket.dart';
 import 'package:flutter_chat/services/users_service.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +22,13 @@ class UsersPage extends StatefulWidget {
 
 class _UsersPageState extends State<UsersPage> {
   final usersService = UsersService();
+  final roomsService = RoomService();
 
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
   List<User> users = [];
+  List<Room> rooms = [];
 
   @override
   void initState() {
@@ -68,6 +73,13 @@ class _UsersPageState extends State<UsersPage> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        // On click  => Open SelectContact page
+        onPressed: () {
+          Navigator.pushNamed(context, NewroomPage.routeName);
+        },
+        child: const Icon(Icons.group_add_rounded),
+      ),
       body: SmartRefresher(
         controller: _refreshController,
         header: const WaterDropHeader(
@@ -78,13 +90,47 @@ class _UsersPageState extends State<UsersPage> {
           ),
         ),
         onRefresh: _loadingUsers,
-        child: ListView.separated(
-          physics: const BouncingScrollPhysics(),
-          itemCount: users.length,
-          separatorBuilder: (BuildContext context, int index) =>
-              const Divider(),
-          itemBuilder: (BuildContext context, int index) =>
-              UserItem(users[index]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ListView.separated(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: rooms.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+              itemBuilder: (BuildContext context, int index) =>
+                  RoomItem(rooms[index]),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              width: MediaQuery.of(context).size.width * .8,
+              height: 42,
+              child: Container(
+                alignment: Alignment.center,
+                height: 32,
+                width: 64,
+                color: const Color.fromARGB(255, 145, 231, 255),
+                child: const Text(
+                  'Users:',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Color.fromARGB(255, 24, 80, 164),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: users.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+              itemBuilder: (BuildContext context, int index) =>
+                  UserItem(users[index]),
+            ),
+          ],
         ),
       ),
     );
@@ -92,6 +138,7 @@ class _UsersPageState extends State<UsersPage> {
 
   void _loadingUsers() async {
     users = await usersService.getUsers();
+    rooms = await roomsService.getRooms();
     _refreshController.refreshCompleted();
     setState(() {});
   }
@@ -120,14 +167,11 @@ class UserItem extends StatelessWidget {
           color: Color.fromARGB(255, 24, 80, 164),
         ),
       ),
-      leading: CircleAvatar(
-        backgroundColor: const Color.fromARGB(255, 145, 231, 255),
-        child: Text(
-          user.name.substring(0, 2),
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.blue[900],
-          ),
+      leading: const CircleAvatar(
+        backgroundColor: Color.fromARGB(255, 145, 231, 255),
+        child: Icon(
+          Icons.person_rounded,
+          //color: (user.online) ? Colors.green : Colors.red,
         ),
       ),
       trailing: Icon(
@@ -137,6 +181,63 @@ class UserItem extends StatelessWidget {
       onTap: () {
         final chatService = Provider.of<ChatService>(context, listen: false);
         chatService.userFrom = user;
+        Navigator.pushNamed(context, ChatPage.routeName);
+      },
+    );
+  }
+}
+
+class RoomItem extends StatelessWidget {
+  final Room room;
+  RoomItem(
+    this.room,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    //late User? user;
+    //user = null;
+    //print(room.groupname);
+    //user.name = room.['groupname'];
+    //user.uid = room.uid;
+
+    return ListTile(
+      title: Text(
+        room.groupname,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.blue[900],
+        ),
+      ),
+      subtitle: const Text(
+        "Group Chat",
+        style: TextStyle(
+          fontStyle: FontStyle.italic,
+          color: Color.fromARGB(255, 24, 80, 164),
+        ),
+      ),
+      leading: const CircleAvatar(
+        backgroundColor: Color.fromARGB(255, 145, 231, 255),
+        child: Icon(
+          Icons.group_rounded,
+          //color: (user.online) ? Colors.green : Colors.red,
+        ),
+      ),
+      /*
+      trailing: Icon(
+        Icons.check_circle_outline,
+        color: (user.online) ? Colors.green : Colors.red,
+      ),
+      */
+      onTap: () {
+        final chatService = Provider.of<ChatService>(context, listen: false);
+        chatService.userFrom = User(
+          online: true,
+          name: room.groupname,
+          email: "na => Group Chat",
+          uid: room.uid,
+          time: "na",
+        );
         Navigator.pushNamed(context, ChatPage.routeName);
       },
     );

@@ -16,6 +16,7 @@ class Message {
     required this.createdAt,
     required this.updatedAt,
     required this.groupChat,
+    required this.name,
   });
 
   String from;
@@ -24,6 +25,7 @@ class Message {
   DateTime createdAt;
   DateTime updatedAt;
   bool groupChat;
+  String name;
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
         from: json["from"],
@@ -32,6 +34,7 @@ class Message {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         groupChat: json["groupChat"],
+        name: json["name"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -41,5 +44,6 @@ class Message {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "groupChat": groupChat,
+        "name": name,
       };
 }

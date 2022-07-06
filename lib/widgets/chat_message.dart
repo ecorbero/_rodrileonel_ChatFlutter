@@ -7,6 +7,7 @@ class ChatMessage extends StatelessWidget {
   final String uid;
   final String time;
   final bool groupChat;
+  final String name;
   final AnimationController anim;
 
   const ChatMessage({
@@ -15,6 +16,7 @@ class ChatMessage extends StatelessWidget {
     required this.time,
     required this.groupChat,
     required this.anim,
+    required this.name,
   });
 
   @override
@@ -50,9 +52,9 @@ class ChatMessage extends StatelessWidget {
                       : CrossAxisAlignment.start,
                   children: [
                     if (groupChat && this.uid != uid) ...[
-                      const Text(
-                        "name of person:",
-                        style: TextStyle(
+                      Text(
+                        name,
+                        style: const TextStyle(
                           fontSize: 10,
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.bold,

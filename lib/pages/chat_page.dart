@@ -39,7 +39,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     authService = Provider.of<AuthService>(context, listen: false);
     chatService = Provider.of<ChatService>(context, listen: false);
 
-    otherUser = chatService.userFrom;
+    otherUser = chatService.userFrom; // from users_page : chatService.userFrom
     socketService.socket.on('message', _listenMessage);
 
     isIos = false;
@@ -49,17 +49,24 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         isIos = true;
       }
     }
+    //print(chatService.userFrom.uid);
 
     _loadingChat(chatService.userFrom.uid);
   }
 
   void _loadingChat(String uid) async {
+    if (chatService.userFrom.email == "na => Group Chat") {
+      uid = "AAA$uid";
+      //print(uid);
+    }
+
     List<Message> chat = await chatService.getChat(uid);
     final history = chat.map((m) => ChatMessage(
           text: m.message,
           uid: m.from,
           time: m.createdAt.toString().substring(0, 16),
           groupChat: m.groupChat, //
+          name: m.name,
           anim: AnimationController(
               vsync: this, duration: const Duration(milliseconds: 0))
             ..forward(),
@@ -70,13 +77,18 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   }
 
   void _listenMessage(dynamic data) {
-    // Show received messages only if coming from otherUser
-    if (otherUser.uid == data['from']) {
+    print(data);
+
+    // Show received messages only if..
+    if (otherUser.email == "na => Group Chat" || // it is a group message
+        otherUser.uid == data['from']) {
+      // from otherUser to this user
       ChatMessage msj = ChatMessage(
         text: data['message'],
         uid: data['from'],
         time: data['time'],
         groupChat: data['groupChat'], //
+        name: data['name'],
         anim: AnimationController(
           vsync: this,
           duration: Duration(milliseconds: 500),
@@ -96,14 +108,11 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         elevation: 1,
         backgroundColor: const Color.fromARGB(255, 0, 157, 200),
         title: Row(children: [
-          CircleAvatar(
-            backgroundColor: const Color.fromARGB(255, 145, 231, 255),
-            child: Text(
-              otherUser.name.substring(0, 2),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.blue[900],
-              ),
+          const CircleAvatar(
+            backgroundColor: Color.fromARGB(255, 145, 231, 255),
+            child: Icon(
+              Icons.person_rounded,
+              //color: (user.online) ? Colors.green : Colors.red,
             ),
           ),
           const SizedBox(width: 10),
@@ -202,7 +211,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       text: text,
       uid: authService.user.uid,
       time: DateTime.now().toString().substring(0, 16),
-      groupChat: false, //
+      groupChat: otherUser.email == "na => Group Chat" ? true : false, //
+      name: authService.user.name,
       anim: AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 500),
@@ -216,12 +226,13 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       writing = false;
     });
 
-    //enviar mensaje al socket server
+    // Sedn message to socket server
     socketService.socket.emit('message', {
       'from': authService.user.uid,
-      'to': otherUser.uid,
+      'to': otherUser.uid, // from users_page : chatService.userFrom
       'message': text,
-      'groupChat': false,
+      'groupChat': otherUser.email == "na => Group Chat" ? true : false,
+      'name': authService.user.name,
       'time': DateTime.now().toString().substring(0, 16)
     });
   }

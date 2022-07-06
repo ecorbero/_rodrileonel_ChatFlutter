@@ -61,6 +61,7 @@ class _Form extends StatelessWidget {
     final socketService = Provider.of<SocketService>(context);
     return Center(
       child: Container(
+        constraints: const BoxConstraints(minWidth: 180, maxWidth: 600),
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(children: [
           Input(
@@ -85,7 +86,7 @@ class _Form extends StatelessWidget {
             controller: passController,
             hidden: true,
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           SignButton(
