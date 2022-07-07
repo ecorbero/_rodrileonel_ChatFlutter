@@ -45,7 +45,7 @@ class _UsersPageState extends State<UsersPage> {
         elevation: 1,
         backgroundColor: const Color.fromARGB(255, 0, 157, 200),
         title: Text(
-          "Flatter Chat - ${user.name}",
+          user.name,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -90,17 +90,65 @@ class _UsersPageState extends State<UsersPage> {
           ),
         ),
         onRefresh: _loadingUsers,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: ListView.separated(
+          //shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          itemCount: users.length + rooms.length + 2,
+          separatorBuilder: (BuildContext context, int index) =>
+              const Divider(),
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return Container(
+                alignment: Alignment.center,
+                height: 32,
+                width: 64,
+                color: const Color.fromARGB(255, 145, 231, 255),
+                child: const Text(
+                  'Rooms:',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Color.fromARGB(255, 24, 80, 164),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            } else if (index <= rooms.length) {
+              return RoomItem(rooms[index - 1]);
+            } else if (index == rooms.length + 1) {
+              return Container(
+                alignment: Alignment.center,
+                height: 32,
+                width: 64,
+                color: const Color.fromARGB(255, 145, 231, 255),
+                child: const Text(
+                  'Users:',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Color.fromARGB(255, 24, 80, 164),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            } else {
+              return UserItem(users[index - rooms.length - 2]);
+            }
+          },
+        ),
+
+        /*
+        Column(
+          // mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ListView.separated(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: rooms.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
-              itemBuilder: (BuildContext context, int index) =>
-                  RoomItem(rooms[index]),
+            Expanded(
+              child: ListView.separated(
+                //shrinkWrap: false,
+                physics: BouncingScrollPhysics(),
+                itemCount: rooms.length,
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+                itemBuilder: (BuildContext context, int index) =>
+                    RoomItem(rooms[index]),
+              ),
             ),
             Container(
               alignment: Alignment.centerLeft,
@@ -121,17 +169,21 @@ class _UsersPageState extends State<UsersPage> {
                 ),
               ),
             ),
-            ListView.separated(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: users.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
-              itemBuilder: (BuildContext context, int index) =>
-                  UserItem(users[index]),
+            Expanded(
+              child: ListView.separated(
+                //shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                itemCount: users.length,
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+                itemBuilder: (BuildContext context, int index) {
+                  return UserItem(users[index]);
+                },
+              ),
             ),
           ],
         ),
+        */
       ),
     );
   }

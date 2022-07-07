@@ -13,22 +13,24 @@ class SocketService with ChangeNotifier {
   ServerStatus get serverStatus => _serverStatus;
   IO.Socket get socket => _socket;
 
-  void connect() async {
+  void connect(String room) async {
     //obtengo el token del storage
     final token = await AuthService.getToken();
 
-    print('Conectant al socket... token = ${token}');
-
     if (kIsWeb) {
+      print('Conectant al socket... token = ${token}');
+      print('Conectant al room... token = ${room}');
       // for Web => run without ".setTransports"..
       _socket = IO.io(Environment.socketUrl, {
         //'transports': ['websocket'],
+        'transports': ['polling'],
         'autoConnect': true,
         'forceNew': true, //crea una nueva instancia/cliente,
         //sin esto el backend trata de mantener la misma sesion
         //pero necesitamos que sea una nueva por el manejo de tokens
         'extraHeaders': {
           'x-token': token,
+          'room': room,
         }
       });
     } else {
@@ -41,6 +43,7 @@ class SocketService with ChangeNotifier {
         //pero necesitamos que sea una nueva por el manejo de tokens
         'extraHeaders': {
           'x-token': token,
+          'room': room,
         }
       });
     }
@@ -50,13 +53,13 @@ class SocketService with ChangeNotifier {
     socket.onConnect((data) => {
           print('Connected to socket server'),
           _serverStatus = ServerStatus.Online,
-          notifyListeners(),
+          //notifyListeners(),
         });
 
     socket.onDisconnect((data) => {
           print('Disconnected from socket server'),
           _serverStatus = ServerStatus.Offline,
-          notifyListeners(),
+          //notifyListeners(),
         });
 /*
     _socket.on('connect', (_) {
@@ -74,7 +77,8 @@ class SocketService with ChangeNotifier {
   }
 
   void disconnect() {
-    print('Desconectando del socket...');
+    print('121222 Reconnecting socket...');
     _socket.disconnect();
+    print('211222121 Disconnected socket...');
   }
 }

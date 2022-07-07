@@ -4,12 +4,14 @@ class Input extends StatelessWidget {
   final String placeholder;
   final IconData icon;
   final bool hidden;
+  final int maxLenght;
   final TextEditingController controller;
 
   const Input({
     required this.placeholder,
     required this.icon,
     required this.controller,
+    required this.maxLenght,
     this.hidden = false,
   });
 
@@ -27,13 +29,15 @@ class Input extends StatelessWidget {
                 blurRadius: 5)
           ]),
       child: TextField(
-        controller: this.controller,
+        controller: controller,
         autocorrect: false,
         obscureText: hidden,
         keyboardType: TextInputType.emailAddress,
+        maxLength: maxLenght,
         decoration: InputDecoration(
-            prefixIcon: Icon(this.icon),
-            hintText: this.placeholder,
+            counterText: '',
+            prefixIcon: Icon(icon),
+            hintText: placeholder,
             focusedBorder: InputBorder.none,
             border: InputBorder.none),
       ),

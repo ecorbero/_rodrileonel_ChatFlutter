@@ -26,15 +26,15 @@ class RegisterPage extends StatelessWidget {
               //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 const SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 Logo(),
                 const SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 _Form(),
                 const SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 const LoginRegisterButton(
                   routeName: LoginPage.routeName,
@@ -67,27 +67,30 @@ class _Form extends StatelessWidget {
           Input(
             icon: Icons.perm_identity_outlined,
             placeholder: 'User',
+            maxLenght: 16,
             controller: userController,
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           Input(
             icon: Icons.email_outlined,
             placeholder: 'Email',
+            maxLenght: 32,
             controller: emailController,
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           Input(
             icon: Icons.lock_outlined,
             placeholder: 'Password',
+            maxLenght: 32,
             controller: passController,
             hidden: true,
           ),
           const SizedBox(
-            height: 30,
+            height: 20,
           ),
           SignButton(
             label: 'Register',
@@ -99,7 +102,7 @@ class _Form extends StatelessWidget {
                         emailController.text.trim(),
                         passController.text);
                     if (msg == true) {
-                      socketService.connect();
+                      socketService.connect("noroom");
                       Navigator.pushReplacementNamed(
                           context, UsersPage.routeName);
                     } else

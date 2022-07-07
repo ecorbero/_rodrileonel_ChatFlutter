@@ -40,6 +40,24 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     chatService = Provider.of<ChatService>(context, listen: false);
 
     otherUser = chatService.userFrom; // from users_page : chatService.userFrom
+
+    // If Room Chat disconnect from Scokect, and connect again with Room ID
+    if (otherUser.email == "na => Group Chat") {
+      // Group Chat => Change room Mesage sent to server
+      socketService.socket.emit('message', {
+        'changeroom': true,
+        'leaveRoom': authService.user.uid,
+        'joinRoom': otherUser.uid,
+      });
+    } else {
+      // No Group Chat => change room Mesage sent to server
+      socketService.socket.emit('message', {
+        'changeroom': true,
+        'leaveRoom': 'na',
+        'joinRoom': authService.user.uid,
+      });
+    }
+
     socketService.socket.on('message', _listenMessage);
 
     isIos = false;
@@ -78,6 +96,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   void _listenMessage(dynamic data) {
     print(data);
+    print("ddwkopfwkw");
 
     // Show received messages only if..
     if (otherUser.email == "na => Group Chat" || // it is a group message
@@ -108,10 +127,12 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         elevation: 1,
         backgroundColor: const Color.fromARGB(255, 0, 157, 200),
         title: Row(children: [
-          const CircleAvatar(
-            backgroundColor: Color.fromARGB(255, 145, 231, 255),
+          CircleAvatar(
+            backgroundColor: const Color.fromARGB(255, 145, 231, 255),
             child: Icon(
-              Icons.person_rounded,
+              (otherUser.email == "na => Group Chat")
+                  ? Icons.group_rounded
+                  : Icons.person_rounded,
               //color: (user.online) ? Colors.green : Colors.red,
             ),
           ),

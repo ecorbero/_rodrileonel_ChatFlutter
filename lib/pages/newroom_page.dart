@@ -93,6 +93,7 @@ class _Form extends StatelessWidget {
           Input(
             icon: Icons.drive_file_rename_outline_rounded,
             placeholder: 'Room Name',
+            maxLenght: 16,
             controller: textController,
           ),
           const SizedBox(

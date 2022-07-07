@@ -68,6 +68,7 @@ class _Form extends StatelessWidget {
           Input(
             icon: Icons.email_outlined,
             placeholder: 'Email',
+            maxLenght: 32,
             controller: emailController,
           ),
           const SizedBox(
@@ -76,6 +77,7 @@ class _Form extends StatelessWidget {
           Input(
             icon: Icons.lock_outlined,
             placeholder: 'Password',
+            maxLenght: 32,
             controller: passController,
             hidden: true,
           ),
@@ -92,7 +94,7 @@ class _Form extends StatelessWidget {
                         emailController.text.trim(), passController.text);
                     if (loginOK) {
                       //conectar a socketserver
-                      socketService.connect();
+                      socketService.connect("noroom");
                       //navegar a la pantalla de usuarios
                       Navigator.pushReplacementNamed(
                           context, UsersPage.routeName);

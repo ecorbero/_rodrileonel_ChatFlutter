@@ -26,7 +26,7 @@ class LoadingPage extends StatelessWidget {
 
     final auth = await authService.logged();
     if (auth) {
-      socketService.connect();
+      socketService.connect("noroom");
       //Navigator.pushReplacementNamed(context, UsersPage.routeName);
       Navigator.pushReplacement(
           context,

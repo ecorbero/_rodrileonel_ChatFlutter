@@ -26,7 +26,7 @@ class RoomService with ChangeNotifier {
     if (response.statusCode == 200) {
       return true;
     } else {
-      return jsonDecode(response.body)['msg'];
+      return; // jsonDecode(response.body)['msg']
     }
   }
 
