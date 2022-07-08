@@ -55,7 +55,7 @@ class ChatMessage extends StatelessWidget {
                       Text(
                         name,
                         style: const TextStyle(
-                          fontSize: 10,
+                          fontSize: 12,
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 19, 45, 20),

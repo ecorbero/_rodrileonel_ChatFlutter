@@ -41,20 +41,14 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
     otherUser = chatService.userFrom; // from users_page : chatService.userFrom
 
-    // If Room Chat disconnect from Scokect, and connect again with Room ID
+    // Socket Change Room if it is a Group Chat
     if (otherUser.email == "na => Group Chat") {
       // Group Chat => Change room Mesage sent to server
+      print('Enter Room = ${otherUser.uid}');
       socketService.socket.emit('message', {
         'changeroom': true,
-        'leaveRoom': authService.user.uid,
-        'joinRoom': otherUser.uid,
-      });
-    } else {
-      // No Group Chat => change room Mesage sent to server
-      socketService.socket.emit('message', {
-        'changeroom': true,
-        'leaveRoom': 'na',
-        'joinRoom': authService.user.uid,
+        'leaveRoom': authService.user.uid, // User Id
+        'joinRoom': otherUser.uid, // Room Id
       });
     }
 
@@ -95,13 +89,12 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   }
 
   void _listenMessage(dynamic data) {
-    print(data);
-    print("ddwkopfwkw");
-
     // Show received messages only if..
-    if (otherUser.email == "na => Group Chat" || // it is a group message
+    //  1. it is a group message, and from different user
+    //  2. from otherUser to this user
+    if ((otherUser.email == "na => Group Chat" &&
+            data['from'] != authService.user.uid) ||
         otherUser.uid == data['from']) {
-      // from otherUser to this user
       ChatMessage msj = ChatMessage(
         text: data['message'],
         uid: data['from'],
@@ -110,7 +103,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         name: data['name'],
         anim: AnimationController(
           vsync: this,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
         ),
       );
       setState(() {
@@ -122,55 +115,72 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        backgroundColor: const Color.fromARGB(255, 0, 157, 200),
-        title: Row(children: [
-          CircleAvatar(
-            backgroundColor: const Color.fromARGB(255, 145, 231, 255),
-            child: Icon(
-              (otherUser.email == "na => Group Chat")
-                  ? Icons.group_rounded
-                  : Icons.person_rounded,
-              //color: (user.online) ? Colors.green : Colors.red,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              otherUser.name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                //color: Colors.blue[900],
+    return WillPopScope(
+      onWillPop: () async {
+        // On Exit Page > You can do some work here.
+        // If Group Chat => Change Socket Room
+        if (otherUser.email == "na => Group Chat") {
+          //print('Leave Room = ${otherUser.uid}');
+          // Group Chat => Change room Mesage sent to server
+          socketService.socket.emit('message', {
+            'changeroom': true,
+            'leaveRoom': otherUser.uid, // Room Id
+            'joinRoom': authService.user.uid, // User Id
+          });
+        }
+        // Returning true allows the pop (exit page) to happen, returning false prevents it.
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 1,
+          backgroundColor: const Color.fromARGB(255, 0, 157, 200),
+          title: Row(children: [
+            CircleAvatar(
+              backgroundColor: const Color.fromARGB(255, 145, 231, 255),
+              child: Icon(
+                (otherUser.email == "na => Group Chat")
+                    ? Icons.group_rounded
+                    : Icons.person_rounded,
+                //color: (user.online) ? Colors.green : Colors.red,
               ),
             ),
-          ),
-        ]),
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            Flexible(
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/whatsapp_back.png'),
-                    fit: BoxFit.cover,
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                otherUser.name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  //color: Colors.blue[900],
+                ),
+              ),
+            ),
+          ]),
+        ),
+        body: Container(
+          child: Column(
+            children: [
+              Flexible(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/whatsapp_back.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: ListView.builder(
+                    reverse: true,
+                    itemCount: _items.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _items[index];
+                    },
                   ),
                 ),
-                child: ListView.builder(
-                  reverse: true,
-                  itemCount: _items.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return _items[index];
-                  },
-                ),
               ),
-            ),
-            const Divider(height: 2),
-            _inputChat(),
-          ],
+              const Divider(height: 2),
+              _inputChat(),
+            ],
+          ),
         ),
       ),
     );
