@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Environment {
-  //static String apiUrl = 'https://obscure-hollows-43329.herokuapp.com/api';
-  //static String socketUrl = 'https://obscure-hollows-43329.herokuapp.com';
   //
   static String apiUrl = kIsWeb
       ? 'http://localhost:3000/api' // for Web

@@ -2,7 +2,7 @@
 
 This folder has the files for the Flutter App.
 
-You will need the folder with the Node Js files as well.
+You will need the folder with the [Node Js](https://github.com/ecorbero/_rodrileonel_ChatNode) files as well.
 
 ## Description
 
