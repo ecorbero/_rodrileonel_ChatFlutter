@@ -1,17 +1,19 @@
 import 'package:flutter_chat/global/environment.dart';
 import 'package:flutter_chat/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter/foundation.dart' show kIsWeb;
+
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 enum ServerStatus { Online, Offline, Conecting }
 
 class SocketService with ChangeNotifier {
   ServerStatus _serverStatus = ServerStatus.Conecting;
-  late IO.Socket _socket;
+  //late IO.Socket _socket;
 
   ServerStatus get serverStatus => _serverStatus;
-  IO.Socket get socket => _socket;
+
+  late IO.Socket socket;
 
   void connect(String room) async {
     //obtengo el token del storage
@@ -20,14 +22,11 @@ class SocketService with ChangeNotifier {
     if (kIsWeb) {
       print('Conectant al socket... token = ${token}');
       print('Conectant al room... token = ${room}');
-      // for Web => run without ".setTransports"..
-      _socket = IO.io(Environment.socketUrl, {
-        //'transports': ['websocket'],
+
+      socket = IO.io(Environment.socketUrl, <String, dynamic>{
         'transports': ['polling'],
-        'autoConnect': true,
-        'forceNew': true, //crea una nueva instancia/cliente,
-        //sin esto el backend trata de mantener la misma sesion
-        //pero necesitamos que sea una nueva por el manejo de tokens
+        'autoConnect': false,
+        'forceNew': true,
         'extraHeaders': {
           'x-token': token,
           'room': room,
@@ -35,18 +34,18 @@ class SocketService with ChangeNotifier {
       });
     } else {
       // for No Web => run with ".setTransports"...
-      _socket = IO.io(Environment.socketUrl, {
+      socket = IO.io(Environment.socketUrl, <String, dynamic>{
         'transports': ['websocket'],
-        'autoConnect': true,
-        'forceNew': true, //crea una nueva instancia/cliente,
-        //sin esto el backend trata de mantener la misma sesion
-        //pero necesitamos que sea una nueva por el manejo de tokens
+        'autoConnect': false,
+        'forceNew': true,
         'extraHeaders': {
           'x-token': token,
           'room': room,
         }
       });
     }
+
+    socket.connect();
 
     // Connect to websocket
     //socket.connect();
@@ -78,7 +77,7 @@ class SocketService with ChangeNotifier {
 
   void disconnect() {
     print('121222 Reconnecting socket...');
-    _socket.disconnect();
+    socket.disconnect();
     print('211222121 Disconnected socket...');
   }
 }
