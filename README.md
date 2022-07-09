@@ -39,8 +39,8 @@ To start this project:
 0. Clone this Repository
 1. Clone the [Node Files](https://github.com/ecorbero/_rodrileonel_ChatNode), run de Node app, wait for the message "DB Online"
 2. Run on your terminal => flutter pub get
-3. Select your Android Emulator, and run the program
-4. The app has yet to be tested for iOS, and the rest of the platforms!
+3. Select your Android Emulator or a Browser, and run the program
+4. The app has yet to be tested for iOS, let me know if it works!
 
 ## Online Demo
 
