@@ -12,10 +12,24 @@ The app allows you to have private and room chats.
 
 ## Screenshots
 
+Login Page (Android):
+
 ![Chat Login Page](https://raw.githubusercontent.com/ecorbero/_rodrileonel_ChatFlutter/master/screenshots/login.PNG "Chat Login Page")
+
+Register Page (Android):
+
 ![Chat Register Page](https://raw.githubusercontent.com/ecorbero/_rodrileonel_ChatFlutter/master/screenshots/register.PNG "Chat Register Page")
+
+Users Page (Web App):
+
 ![Chat Users Page](https://raw.githubusercontent.com/ecorbero/_rodrileonel_ChatFlutter/master/screenshots/users.PNG "Chat Users Page")
+
+Private Chat Page (Web App):
+
 ![Chat chat Page](https://raw.githubusercontent.com/ecorbero/_rodrileonel_ChatFlutter/master/screenshots/chat.PNG "Chat Chat Page")
+
+Room Chat Page (Web App):
+
 ![Chat Room Page](https://raw.githubusercontent.com/ecorbero/_rodrileonel_ChatFlutter/master/screenshots/group.PNG "Chat Room Page")
 
 ## Getting Started
