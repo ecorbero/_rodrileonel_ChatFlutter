@@ -28,6 +28,10 @@ To start this project:
 3. Select your Android Emulator, and run the program
 4. The app has yet to be tested for iOS, and the rest of the platforms!
 
+## Online Demo
+
+https://ecorbero.github.io/flatter_chat
+
 ## Bibliography
 
 https://github.com/rodrileonel/ChatSocket
