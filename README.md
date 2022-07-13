@@ -1,14 +1,14 @@
-# Flutter/Node/MongoDB Chat
-
-This folder has the files for the Flutter App.
-
-You will need the folder with the [Node Js](https://github.com/ecorbero/_rodrileonel_ChatNode) files as well.
-
 ## Description
 
 Flutter 3.0 Chat App, with Node Js, Mongoose and Token JWT Authentication.
 
 The app allows you to have private and room chats.
+
+# Flutter/Node/MongoDB Chat
+
+This folder has the files for the Flutter App.
+
+You will need the folder with the [Node Js](https://github.com/ecorbero/_rodrileonel_ChatNode) files as well.
 
 ## Screenshots
 
@@ -45,6 +45,10 @@ To start this project:
 ## Online Demo
 
 https://ecorbero.github.io/flatter_chat
+
+If you don't want to register, you can use one of these demo users: 1@gmail.com, 2@gmail.com, 3@gmail.com, 4@gmail.com. Password = 1234
+
+If you want to try the room chat, you can open different private tabs in your browser and login with several users at the same time.
 
 ## Bibliography
 
