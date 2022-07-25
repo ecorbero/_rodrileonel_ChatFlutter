@@ -40,6 +40,11 @@ dependencies:
   http: ^0.13.4
   flutter_secure_storage: ^5.0.2
   socket_io_client: ^2.0.0-beta.2
+  flutter_native_splash: ^2.2.6
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/splash.png
 
 dev_dependencies:
   flutter_test:
